@@ -15,37 +15,37 @@ import java.util.Map;
 /**
  * Created by haoran on 2019/2/18.
  */
-public class CacheMemoryAndDisk {
-    private static final Map<String, CacheMemoryAndDisk> CACHE_MAP = new HashMap<>();
+public class MemoryAndDiskCacheUtils {
+    private static final Map<String, MemoryAndDiskCacheUtils> CACHE_MAP = new HashMap<>();
 
-    private final CacheMemoryUtils mCacheMemoryUtils;
-    private final CacheDiskUtils mCacheDiskUtils;
+    private final MemoryCacheUtils mMemoryCacheUtils;
+    private final DiskCacheUtils mDiskCacheUtils;
 
     /**
-     * Return the single {@link CacheMemoryAndDisk} instance.
+     * Return the single {@link MemoryAndDiskCacheUtils} instance.
      *
-     * @return the single {@link CacheMemoryAndDisk} instance
+     * @return the single {@link MemoryAndDiskCacheUtils} instance
      */
-    public static CacheMemoryAndDisk getInstance() {
-        return getInstance(CacheMemoryUtils.getInstance(), CacheDiskUtils.getInstance());
+    public static MemoryAndDiskCacheUtils getInstance() {
+        return getInstance(MemoryCacheUtils.getInstance(), DiskCacheUtils.getInstance());
     }
 
     /**
-     * Return the single {@link CacheMemoryAndDisk} instance.
+     * Return the single {@link MemoryAndDiskCacheUtils} instance.
      *
-     * @param cacheMemoryUtils The instance of {@link CacheMemoryUtils}.
-     * @param cacheDiskUtils   The instance of {@link CacheDiskUtils}.
-     * @return the single {@link CacheMemoryAndDisk} instance
+     * @param memoryCacheUtils The instance of {@link MemoryCacheUtils}.
+     * @param diskCacheUtils   The instance of {@link DiskCacheUtils}.
+     * @return the single {@link MemoryAndDiskCacheUtils} instance
      */
-    public static CacheMemoryAndDisk getInstance(@NonNull final CacheMemoryUtils cacheMemoryUtils,
-                                                 @NonNull final CacheDiskUtils cacheDiskUtils) {
-        final String cacheKey = cacheDiskUtils.toString() + "_" + cacheMemoryUtils.toString();
-        CacheMemoryAndDisk cache = CACHE_MAP.get(cacheKey);
+    public static MemoryAndDiskCacheUtils getInstance(@NonNull final MemoryCacheUtils memoryCacheUtils,
+                                                      @NonNull final DiskCacheUtils diskCacheUtils) {
+        final String cacheKey = diskCacheUtils.toString() + "_" + memoryCacheUtils.toString();
+        MemoryAndDiskCacheUtils cache = CACHE_MAP.get(cacheKey);
         if (cache == null) {
-            synchronized (CacheMemoryAndDisk.class) {
+            synchronized (MemoryAndDiskCacheUtils.class) {
                 cache = CACHE_MAP.get(cacheKey);
                 if (cache == null) {
-                    cache = new CacheMemoryAndDisk(cacheMemoryUtils, cacheDiskUtils);
+                    cache = new MemoryAndDiskCacheUtils(memoryCacheUtils, diskCacheUtils);
                     CACHE_MAP.put(cacheKey, cache);
                 }
             }
@@ -53,9 +53,9 @@ public class CacheMemoryAndDisk {
         return cache;
     }
 
-    private CacheMemoryAndDisk(CacheMemoryUtils cacheMemoryUtils, CacheDiskUtils cacheUtils) {
-        mCacheMemoryUtils = cacheMemoryUtils;
-        mCacheDiskUtils = cacheUtils;
+    private MemoryAndDiskCacheUtils(MemoryCacheUtils memoryCacheUtils, DiskCacheUtils cacheUtils) {
+        mMemoryCacheUtils = memoryCacheUtils;
+        mDiskCacheUtils = cacheUtils;
     }
 
 
@@ -81,8 +81,8 @@ public class CacheMemoryAndDisk {
      * @param saveTime The save time of cache, in seconds.
      */
     public void put(@NonNull final String key, byte[] value, final int saveTime) {
-        mCacheMemoryUtils.put(key, value, saveTime);
-        mCacheDiskUtils.put(key, value, saveTime);
+        mMemoryCacheUtils.put(key, value, saveTime);
+        mDiskCacheUtils.put(key, value, saveTime);
     }
 
     /**
@@ -103,9 +103,9 @@ public class CacheMemoryAndDisk {
      * @return the bytes if cache exists or defaultValue otherwise
      */
     public byte[] getBytes(@NonNull final String key, final byte[] defaultValue) {
-        byte[] obj = mCacheMemoryUtils.get(key);
+        byte[] obj = mMemoryCacheUtils.get(key);
         if (obj != null) return obj;
-        return mCacheDiskUtils.getBytes(key, defaultValue);
+        return mDiskCacheUtils.getBytes(key, defaultValue);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -130,8 +130,8 @@ public class CacheMemoryAndDisk {
      * @param saveTime The save time of cache, in seconds.
      */
     public void put(@NonNull final String key, final String value, final int saveTime) {
-        mCacheMemoryUtils.put(key, value, saveTime);
-        mCacheDiskUtils.put(key, value, saveTime);
+        mMemoryCacheUtils.put(key, value, saveTime);
+        mDiskCacheUtils.put(key, value, saveTime);
     }
 
     /**
@@ -152,9 +152,9 @@ public class CacheMemoryAndDisk {
      * @return the string value if cache exists or defaultValue otherwise
      */
     public String getString(@NonNull final String key, final String defaultValue) {
-        String obj = mCacheMemoryUtils.get(key);
+        String obj = mMemoryCacheUtils.get(key);
         if (obj != null) return obj;
-        return mCacheDiskUtils.getString(key, defaultValue);
+        return mDiskCacheUtils.getString(key, defaultValue);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -181,8 +181,8 @@ public class CacheMemoryAndDisk {
     public void put(@NonNull final String key,
                     final JSONObject value,
                     final int saveTime) {
-        mCacheMemoryUtils.put(key, value, saveTime);
-        mCacheDiskUtils.put(key, value, saveTime);
+        mMemoryCacheUtils.put(key, value, saveTime);
+        mDiskCacheUtils.put(key, value, saveTime);
     }
 
     /**
@@ -203,9 +203,9 @@ public class CacheMemoryAndDisk {
      * @return the JSONObject if cache exists or defaultValue otherwise
      */
     public JSONObject getJSONObject(@NonNull final String key, final JSONObject defaultValue) {
-        JSONObject obj = mCacheMemoryUtils.get(key);
+        JSONObject obj = mMemoryCacheUtils.get(key);
         if (obj != null) return obj;
-        return mCacheDiskUtils.getJSONObject(key, defaultValue);
+        return mDiskCacheUtils.getJSONObject(key, defaultValue);
     }
 
 
@@ -231,8 +231,8 @@ public class CacheMemoryAndDisk {
      * @param saveTime The save time of cache, in seconds.
      */
     public void put(@NonNull final String key, final JSONArray value, final int saveTime) {
-        mCacheMemoryUtils.put(key, value, saveTime);
-        mCacheDiskUtils.put(key, value, saveTime);
+        mMemoryCacheUtils.put(key, value, saveTime);
+        mDiskCacheUtils.put(key, value, saveTime);
     }
 
     /**
@@ -253,9 +253,9 @@ public class CacheMemoryAndDisk {
      * @return the JSONArray if cache exists or defaultValue otherwise
      */
     public JSONArray getJSONArray(@NonNull final String key, final JSONArray defaultValue) {
-        JSONArray obj = mCacheMemoryUtils.get(key);
+        JSONArray obj = mMemoryCacheUtils.get(key);
         if (obj != null) return obj;
-        return mCacheDiskUtils.getJSONArray(key, defaultValue);
+        return mDiskCacheUtils.getJSONArray(key, defaultValue);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -280,8 +280,8 @@ public class CacheMemoryAndDisk {
      * @param saveTime The save time of cache, in seconds.
      */
     public void put(@NonNull final String key, final Bitmap value, final int saveTime) {
-        mCacheMemoryUtils.put(key, value, saveTime);
-        mCacheDiskUtils.put(key, value, saveTime);
+        mMemoryCacheUtils.put(key, value, saveTime);
+        mDiskCacheUtils.put(key, value, saveTime);
     }
 
     /**
@@ -302,9 +302,9 @@ public class CacheMemoryAndDisk {
      * @return the bitmap if cache exists or defaultValue otherwise
      */
     public Bitmap getBitmap(@NonNull final String key, final Bitmap defaultValue) {
-        Bitmap obj = mCacheMemoryUtils.get(key);
+        Bitmap obj = mMemoryCacheUtils.get(key);
         if (obj != null) return obj;
-        return mCacheDiskUtils.getBitmap(key, defaultValue);
+        return mDiskCacheUtils.getBitmap(key, defaultValue);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -329,8 +329,8 @@ public class CacheMemoryAndDisk {
      * @param saveTime The save time of cache, in seconds.
      */
     public void put(@NonNull final String key, final Drawable value, final int saveTime) {
-        mCacheMemoryUtils.put(key, value, saveTime);
-        mCacheDiskUtils.put(key, value, saveTime);
+        mMemoryCacheUtils.put(key, value, saveTime);
+        mDiskCacheUtils.put(key, value, saveTime);
     }
 
     /**
@@ -351,9 +351,9 @@ public class CacheMemoryAndDisk {
      * @return the drawable if cache exists or defaultValue otherwise
      */
     public Drawable getDrawable(@NonNull final String key, final Drawable defaultValue) {
-        Drawable obj = mCacheMemoryUtils.get(key);
+        Drawable obj = mMemoryCacheUtils.get(key);
         if (obj != null) return obj;
-        return mCacheDiskUtils.getDrawable(key, defaultValue);
+        return mDiskCacheUtils.getDrawable(key, defaultValue);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -378,8 +378,8 @@ public class CacheMemoryAndDisk {
      * @param saveTime The save time of cache, in seconds.
      */
     public void put(@NonNull final String key, final Parcelable value, final int saveTime) {
-        mCacheMemoryUtils.put(key, value, saveTime);
-        mCacheDiskUtils.put(key, value, saveTime);
+        mMemoryCacheUtils.put(key, value, saveTime);
+        mDiskCacheUtils.put(key, value, saveTime);
     }
 
     /**
@@ -407,9 +407,9 @@ public class CacheMemoryAndDisk {
     public <T> T getParcelable(@NonNull final String key,
                                @NonNull final Parcelable.Creator<T> creator,
                                final T defaultValue) {
-        T value = mCacheMemoryUtils.get(key);
+        T value = mMemoryCacheUtils.get(key);
         if (value != null) return value;
-        return mCacheDiskUtils.getParcelable(key, creator, defaultValue);
+        return mDiskCacheUtils.getParcelable(key, creator, defaultValue);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -434,8 +434,8 @@ public class CacheMemoryAndDisk {
      * @param saveTime The save time of cache, in seconds.
      */
     public void put(@NonNull final String key, final Serializable value, final int saveTime) {
-        mCacheMemoryUtils.put(key, value, saveTime);
-        mCacheDiskUtils.put(key, value, saveTime);
+        mMemoryCacheUtils.put(key, value, saveTime);
+        mDiskCacheUtils.put(key, value, saveTime);
     }
 
     /**
@@ -456,9 +456,9 @@ public class CacheMemoryAndDisk {
      * @return the bitmap if cache exists or defaultValue otherwise
      */
     public Object getSerializable(@NonNull final String key, final Object defaultValue) {
-        Object obj = mCacheMemoryUtils.get(key);
+        Object obj = mMemoryCacheUtils.get(key);
         if (obj != null) return obj;
-        return mCacheDiskUtils.getSerializable(key, defaultValue);
+        return mDiskCacheUtils.getSerializable(key, defaultValue);
     }
 
     /**
@@ -467,7 +467,7 @@ public class CacheMemoryAndDisk {
      * @return the size of cache in disk
      */
     public long getCacheDiskSize() {
-        return mCacheDiskUtils.getCacheSize();
+        return mDiskCacheUtils.getCacheSize();
     }
 
     /**
@@ -476,7 +476,7 @@ public class CacheMemoryAndDisk {
      * @return the count of cache in disk
      */
     public int getCacheDiskCount() {
-        return mCacheDiskUtils.getCacheCount();
+        return mDiskCacheUtils.getCacheCount();
     }
 
     /**
@@ -485,7 +485,7 @@ public class CacheMemoryAndDisk {
      * @return the count of cache in memory.
      */
     public int getCacheMemoryCount() {
-        return mCacheMemoryUtils.getCacheCount();
+        return mMemoryCacheUtils.getCacheCount();
     }
 
     /**
@@ -494,15 +494,15 @@ public class CacheMemoryAndDisk {
      * @param key The key of cache.
      */
     public void remove(@NonNull String key) {
-        mCacheMemoryUtils.remove(key);
-        mCacheDiskUtils.remove(key);
+        mMemoryCacheUtils.remove(key);
+        mDiskCacheUtils.remove(key);
     }
 
     /**
      * Clear all of the cache.
      */
     public void clear() {
-        mCacheMemoryUtils.clear();
-        mCacheDiskUtils.clear();
+        mMemoryCacheUtils.clear();
+        mDiskCacheUtils.clear();
     }
 }

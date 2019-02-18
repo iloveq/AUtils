@@ -9,48 +9,48 @@ import java.util.Map;
 /**
  * Created by haoran on 2019/2/18.
  */
-public class CacheMemoryUtils implements CacheConstants {
+public class MemoryCacheUtils implements CacheConstants {
 
     private static final int DEFAULT_MAX_COUNT = 256;
 
-    private static final Map<String, CacheMemoryUtils> CACHE_MAP = new HashMap<>();
+    private static final Map<String, MemoryCacheUtils> CACHE_MAP = new HashMap<>();
 
     private final String                       mCacheKey;
     private final LruCache<String, CacheValue> mMemoryCache;
 
     /**
-     * Return the single {@link CacheMemoryUtils} instance.
+     * Return the single {@link MemoryCacheUtils} instance.
      *
-     * @return the single {@link CacheMemoryUtils} instance
+     * @return the single {@link MemoryCacheUtils} instance
      */
-    public static CacheMemoryUtils getInstance() {
+    public static MemoryCacheUtils getInstance() {
         return getInstance(DEFAULT_MAX_COUNT);
     }
 
     /**
-     * Return the single {@link CacheMemoryUtils} instance.
+     * Return the single {@link MemoryCacheUtils} instance.
      *
      * @param maxCount The max count of cache.
-     * @return the single {@link CacheMemoryUtils} instance
+     * @return the single {@link MemoryCacheUtils} instance
      */
-    public static CacheMemoryUtils getInstance(final int maxCount) {
+    public static MemoryCacheUtils getInstance(final int maxCount) {
         return getInstance(String.valueOf(maxCount), maxCount);
     }
 
     /**
-     * Return the single {@link CacheMemoryUtils} instance.
+     * Return the single {@link MemoryCacheUtils} instance.
      *
      * @param cacheKey The key of cache.
      * @param maxCount The max count of cache.
-     * @return the single {@link CacheMemoryUtils} instance
+     * @return the single {@link MemoryCacheUtils} instance
      */
-    public static CacheMemoryUtils getInstance(final String cacheKey, final int maxCount) {
-        CacheMemoryUtils cache = CACHE_MAP.get(cacheKey);
+    public static MemoryCacheUtils getInstance(final String cacheKey, final int maxCount) {
+        MemoryCacheUtils cache = CACHE_MAP.get(cacheKey);
         if (cache == null) {
-            synchronized (CacheMemoryUtils.class) {
+            synchronized (MemoryCacheUtils.class) {
                 cache = CACHE_MAP.get(cacheKey);
                 if (cache == null) {
-                    cache = new CacheMemoryUtils(cacheKey, new LruCache<String, CacheValue>(maxCount));
+                    cache = new MemoryCacheUtils(cacheKey, new LruCache<String, CacheValue>(maxCount));
                     CACHE_MAP.put(cacheKey, cache);
                 }
             }
@@ -58,7 +58,7 @@ public class CacheMemoryUtils implements CacheConstants {
         return cache;
     }
 
-    private CacheMemoryUtils(String cacheKey, LruCache<String, CacheValue> memoryCache) {
+    private MemoryCacheUtils(String cacheKey, LruCache<String, CacheValue> memoryCache) {
         mCacheKey = cacheKey;
         mMemoryCache = memoryCache;
     }

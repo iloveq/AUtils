@@ -40,13 +40,13 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by haoran on 2019/2/18.
  */
-public class CacheDiskUtils {
+public class DiskCacheUtils {
 
     private static final long   DEFAULT_MAX_SIZE  = Long.MAX_VALUE;
     private static final int    DEFAULT_MAX_COUNT = Integer.MAX_VALUE;
     private static final String CACHE_PREFIX      = "cdu";
 
-    private static final Map<String, CacheDiskUtils> CACHE_MAP = new HashMap<>();
+    private static final Map<String, DiskCacheUtils> CACHE_MAP = new HashMap<>();
 
     private final String           mCacheKey;
     private final File             mCacheDir;
@@ -55,87 +55,87 @@ public class CacheDiskUtils {
     private       DiskCacheManager mDiskCacheManager;
 
     /**
-     * Return the single {@link CacheDiskUtils} instance.
+     * Return the single {@link DiskCacheUtils} instance.
      * <p>cache directory: /data/data/package/cache/cacheUtils</p>
      * <p>cache size: unlimited</p>
      * <p>cache count: unlimited</p>
      *
-     * @return the single {@link CacheDiskUtils} instance
+     * @return the single {@link DiskCacheUtils} instance
      */
-    public static CacheDiskUtils getInstance() {
+    public static DiskCacheUtils getInstance() {
         return getInstance("", DEFAULT_MAX_SIZE, DEFAULT_MAX_COUNT);
     }
 
     /**
-     * Return the single {@link CacheDiskUtils} instance.
+     * Return the single {@link DiskCacheUtils} instance.
      * <p>cache directory: /data/data/package/cache/cacheUtils</p>
      * <p>cache size: unlimited</p>
      * <p>cache count: unlimited</p>
      *
      * @param cacheName The name of cache.
-     * @return the single {@link CacheDiskUtils} instance
+     * @return the single {@link DiskCacheUtils} instance
      */
-    public static CacheDiskUtils getInstance(final String cacheName) {
+    public static DiskCacheUtils getInstance(final String cacheName) {
         return getInstance(cacheName, DEFAULT_MAX_SIZE, DEFAULT_MAX_COUNT);
     }
 
     /**
-     * Return the single {@link CacheDiskUtils} instance.
+     * Return the single {@link DiskCacheUtils} instance.
      * <p>cache directory: /data/data/package/cache/cacheUtils</p>
      *
      * @param maxSize  The max size of cache, in bytes.
      * @param maxCount The max count of cache.
-     * @return the single {@link CacheDiskUtils} instance
+     * @return the single {@link DiskCacheUtils} instance
      */
-    public static CacheDiskUtils getInstance(final long maxSize, final int maxCount) {
+    public static DiskCacheUtils getInstance(final long maxSize, final int maxCount) {
         return getInstance("", maxSize, maxCount);
     }
 
     /**
-     * Return the single {@link CacheDiskUtils} instance.
+     * Return the single {@link DiskCacheUtils} instance.
      * <p>cache directory: /data/data/package/cache/cacheName</p>
      *
      * @param cacheName The name of cache.
      * @param maxSize   The max size of cache, in bytes.
      * @param maxCount  The max count of cache.
-     * @return the single {@link CacheDiskUtils} instance
+     * @return the single {@link DiskCacheUtils} instance
      */
-    public static CacheDiskUtils getInstance(String cacheName, final long maxSize, final int maxCount) {
+    public static DiskCacheUtils getInstance(String cacheName, final long maxSize, final int maxCount) {
         if (isSpace(cacheName)) cacheName = "cacheUtils";
         File file = new File(AppUtils.getApp().getCacheDir(), cacheName);
         return getInstance(file, maxSize, maxCount);
     }
 
     /**
-     * Return the single {@link CacheDiskUtils} instance.
+     * Return the single {@link DiskCacheUtils} instance.
      * <p>cache size: unlimited</p>
      * <p>cache count: unlimited</p>
      *
      * @param cacheDir The directory of cache.
-     * @return the single {@link CacheDiskUtils} instance
+     * @return the single {@link DiskCacheUtils} instance
      */
-    public static CacheDiskUtils getInstance(@NonNull final File cacheDir) {
+    public static DiskCacheUtils getInstance(@NonNull final File cacheDir) {
         return getInstance(cacheDir, DEFAULT_MAX_SIZE, DEFAULT_MAX_COUNT);
     }
 
     /**
-     * Return the single {@link CacheDiskUtils} instance.
+     * Return the single {@link DiskCacheUtils} instance.
      *
      * @param cacheDir The directory of cache.
      * @param maxSize  The max size of cache, in bytes.
      * @param maxCount The max count of cache.
-     * @return the single {@link CacheDiskUtils} instance
+     * @return the single {@link DiskCacheUtils} instance
      */
-    public static CacheDiskUtils getInstance(@NonNull final File cacheDir,
+    public static DiskCacheUtils getInstance(@NonNull final File cacheDir,
                                              final long maxSize,
                                              final int maxCount) {
         final String cacheKey = cacheDir.getAbsoluteFile() + "_" + maxSize + "_" + maxCount;
-        CacheDiskUtils cache = CACHE_MAP.get(cacheKey);
+        DiskCacheUtils cache = CACHE_MAP.get(cacheKey);
         if (cache == null) {
-            synchronized (CacheDiskUtils.class) {
+            synchronized (DiskCacheUtils.class) {
                 cache = CACHE_MAP.get(cacheKey);
                 if (cache == null) {
-                    cache = new CacheDiskUtils(cacheKey, cacheDir, maxSize, maxCount);
+                    cache = new DiskCacheUtils(cacheKey, cacheDir, maxSize, maxCount);
                     CACHE_MAP.put(cacheKey, cache);
                 }
             }
@@ -143,7 +143,7 @@ public class CacheDiskUtils {
         return cache;
     }
 
-    private CacheDiskUtils(final String cacheKey,
+    private DiskCacheUtils(final String cacheKey,
                            final File cacheDir,
                            final long maxSize,
                            final int maxCount) {
@@ -162,7 +162,7 @@ public class CacheDiskUtils {
             if (mCacheDir.mkdirs()) {
                 mDiskCacheManager = new DiskCacheManager(mCacheDir, mMaxSize, mMaxCount);
             } else {
-                Log.e("CacheDiskUtils", "can't make dirs in " + mCacheDir.getAbsolutePath());
+                Log.e("DiskCacheUtils", "can't make dirs in " + mCacheDir.getAbsolutePath());
             }
         }
         return mDiskCacheManager;
