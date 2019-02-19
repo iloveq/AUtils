@@ -19,7 +19,7 @@ public class AUtilsHelper {
         private final static AUtilsHelper IN = new AUtilsHelper();
     }
 
-    public AUtilsHelper get() {
+    public static AUtilsHelper get() {
         return Holder.IN;
     }
 
