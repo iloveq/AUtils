@@ -22,7 +22,6 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
 import android.media.ExifInterface;
 import android.os.Build;
 import android.renderscript.Allocation;
@@ -37,8 +36,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-
-import com.woaiqw.utils.IUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -55,12 +52,11 @@ import java.io.OutputStream;
  * Copy from Blankj github ${https://github.com/Blankj/AndroidUtilCode}
  */
 
-public final class ImageUtils implements IUtils {
+public final class ImageUtils {
 
     private static Application application;
 
-    @Override
-    public void init(Application app) {
+    public static void init(Application app) {
         application = app;
     }
 

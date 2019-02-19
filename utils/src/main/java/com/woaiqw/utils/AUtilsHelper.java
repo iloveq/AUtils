@@ -2,10 +2,12 @@ package com.woaiqw.utils;
 
 import android.app.Application;
 
-import com.woaiqw.utils.core.ClassUtils;
 import com.woaiqw.utils.core.AppUtils;
-
-import java.util.List;
+import com.woaiqw.utils.core.ImageUtils;
+import com.woaiqw.utils.core.KeyboardUtils;
+import com.woaiqw.utils.core.NetworkUtils;
+import com.woaiqw.utils.core.ToastUtils;
+import com.woaiqw.utils.core.UIUtils;
 
 /**
  * Created by haoran on 2019/2/18.
@@ -27,14 +29,11 @@ public class AUtilsHelper {
 
         AppUtils.init(app);
         // utils
-        try {
-            List<IUtils> initList = ClassUtils.getObjectsWithInterface(app, IUtils.class, app.getPackageName());
-            for (IUtils util : initList) {
-                util.init(app);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ImageUtils.init(app);
+        KeyboardUtils.init(app);
+        NetworkUtils.init(app);
+        ToastUtils.init(app);
+        UIUtils.init(app);
 
     }
 

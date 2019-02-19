@@ -13,8 +13,6 @@ import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.Log;
 
-import com.woaiqw.utils.IUtils;
-
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
@@ -36,7 +34,7 @@ import static android.content.Context.WIFI_SERVICE;
 /**
  * Created by haoran on 2019/2/18.
  */
-public class NetworkUtils implements IUtils {
+public class NetworkUtils {
 
     private static Application application;
 
@@ -44,9 +42,8 @@ public class NetworkUtils implements IUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    @Override
-    public void init(Application app) {
-
+    public static void init(Application app) {
+        application = app;
     }
 
     public enum NetworkType {

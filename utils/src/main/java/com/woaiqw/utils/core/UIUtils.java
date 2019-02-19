@@ -11,8 +11,6 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
-import com.woaiqw.utils.IUtils;
-
 
 /**
  * Created by haoran on 2017/4/17.
@@ -20,12 +18,11 @@ import com.woaiqw.utils.IUtils;
  * 屏幕宽高，dp与px转换
  */
 
-public class UIUtils implements IUtils {
+public class UIUtils {
 
     private static Application application;
 
-    @Override
-    public void init(Application app) {
+    public static void init(Application app) {
         application = app;
     }
 

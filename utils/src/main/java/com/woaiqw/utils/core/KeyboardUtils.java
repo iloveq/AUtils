@@ -17,14 +17,12 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
-import com.woaiqw.utils.IUtils;
-
 import java.lang.reflect.Field;
 
 /**
  * Created by haoran on 2019/2/18.
  */
-public class KeyboardUtils implements IUtils {
+public class KeyboardUtils{
 
     private static int sDecorViewInvisibleHeightPre;
     private static OnGlobalLayoutListener onGlobalLayoutListener;
@@ -36,8 +34,8 @@ public class KeyboardUtils implements IUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    @Override
-    public void init(Application app) {
+
+    public static void init(Application app) {
         application = app;
     }
 

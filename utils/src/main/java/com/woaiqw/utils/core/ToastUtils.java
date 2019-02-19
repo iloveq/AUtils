@@ -28,8 +28,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.woaiqw.utils.IUtils;
-
 import java.lang.reflect.Field;
 
 /**
@@ -40,7 +38,7 @@ import java.lang.reflect.Field;
  *     desc  : utils about toast
  * </pre>
  */
-public class ToastUtils implements IUtils {
+public class ToastUtils {
 
     private static final String TAG = "ToastUtils";
 
@@ -62,8 +60,7 @@ public class ToastUtils implements IUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    @Override
-    public void init(Application app) {
+    public static void init(Application app) {
         application = app;
     }
 
