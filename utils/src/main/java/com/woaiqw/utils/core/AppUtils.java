@@ -6,7 +6,6 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -60,22 +59,9 @@ public class AppUtils {
 
     /**
      * Init utils.
-     * <p>Init it in the class of Application.</p>
-     *
-     * @param context context
-     */
-    public static void init(final Context context) {
-        if (context == null) {
-            init(getApplicationByReflect());
-            return;
-        }
-        init((Application) context.getApplicationContext());
-    }
-
-    /**
-     * Init utils.
      * <p>Init it in the class of Application.
-     *  and register life callback </p>
+     * and register life callback </p>
+     *
      * @param app application
      */
     public static void init(final Application app) {
@@ -138,7 +124,7 @@ public class AppUtils {
         return ACTIVITY_LIFECYCLE.mActivityList;
     }
 
-    static Context getTopActivityOrApp() {
+    public static Context getTopActivityOrApp() {
         if (isAppForeground()) {
             Activity topActivity = ACTIVITY_LIFECYCLE.getTopActivity();
             return topActivity == null ? AppUtils.getApp() : topActivity;
@@ -147,7 +133,7 @@ public class AppUtils {
         }
     }
 
-    static boolean isAppForeground() {
+    public static boolean isAppForeground() {
         ActivityManager am = (ActivityManager) AppUtils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
         if (am == null) return false;
         List<ActivityManager.RunningAppProcessInfo> info = am.getRunningAppProcesses();
@@ -162,13 +148,13 @@ public class AppUtils {
 
     static class ActivityLifecycleImpl implements Application.ActivityLifecycleCallbacks {
 
-        final LinkedList<Activity> mActivityList         = new LinkedList<>();
-        final Map<Object, OnAppStatusChangedListener> mStatusListenerMap    = new HashMap<>();
+        final LinkedList<Activity> mActivityList = new LinkedList<>();
+        final Map<Object, OnAppStatusChangedListener> mStatusListenerMap = new HashMap<>();
         final Map<Activity, Set<OnActivityDestroyedListener>> mDestroyedListenerMap = new HashMap<>();
 
-        private int     mForegroundCount = 0;
-        private int     mConfigCount     = 0;
-        private boolean mIsBackground    = false;
+        private int mForegroundCount = 0;
+        private int mConfigCount = 0;
+        private boolean mIsBackground = false;
 
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -364,15 +350,6 @@ public class AppUtils {
         }
     }
 
-    public static final class FileProvider4UtilCode extends FileProvider {
-
-        @Override
-        public boolean onCreate() {
-            AppUtils.init(getContext());
-            return true;
-        }
-    }
-
     ///////////////////////////////////////////////////////////////////////////
     // interface
     ///////////////////////////////////////////////////////////////////////////
@@ -390,8 +367,9 @@ public class AppUtils {
     public static void finishAllActivity() {
         ACTIVITY_LIFECYCLE.mActivityList.clear();
     }
+
     public static void exitApp(Context context) {
-        Log.e("ActivityManager", "app exit" );
+        Log.e("ActivityManager", "app exit");
         try {
             finishAllActivity();
             Runtime.getRuntime().exit(0);
