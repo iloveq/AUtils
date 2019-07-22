@@ -93,6 +93,10 @@ public class AppUtils {
         init(app);
         return app;
     }
+    
+    public static void addOnAppStatusChangedListener(OnAppStatusChangedListener listener){
+        ACTIVITY_LIFECYCLE.addOnAppStatusChangedListener(null,listener);
+    }
 
     private static Application getApplicationByReflect() {
         try {
@@ -355,8 +359,8 @@ public class AppUtils {
     ///////////////////////////////////////////////////////////////////////////
 
     public interface OnAppStatusChangedListener {
+        
         void onForeground();
-
         void onBackground();
     }
 
